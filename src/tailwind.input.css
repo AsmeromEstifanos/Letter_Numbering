@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base theme adjustments */
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-800 font-sans antialiased;
+  }
+  ::selection {
+    @apply bg-brand-500/20;
+  }
+}
+
+/* Reusable components */
+@layer components {
+  .card {
+    @apply bg-white border border-slate-200 rounded-lg shadow-card;
+  }
+  .card-elevated {
+    @apply bg-white border border-slate-200 rounded-lg shadow-elevated;
+  }
+  .page-title {
+    @apply text-3xl font-bold text-slate-800;
+  }
+  .page-subtitle {
+    @apply text-slate-500;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors border border-transparent disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-sm {
+    @apply px-2 py-1 text-xs rounded;
+  }
+  .btn-lg {
+    @apply px-4 py-2.5 text-base rounded-lg;
+  }
+  .btn-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+  }
+  .btn-secondary {
+    @apply bg-slate-100 text-slate-800 hover:bg-slate-200 border-slate-200;
+  }
+  .btn-danger {
+    @apply bg-rose-600 text-white hover:bg-rose-700;
+  }
+  .btn-success {
+    @apply bg-emerald-600 text-white hover:bg-emerald-700;
+  }
+  .btn-info {
+    @apply bg-sky-600 text-white hover:bg-sky-700;
+  }
+
+  /* Forms */
+  .form-label {
+    @apply block text-sm font-medium text-slate-700 mb-1.5;
+  }
+  .form-input {
+    @apply w-full rounded-md border border-slate-300 px-3 py-2 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white;
+  }
+  .form-select {
+    @apply w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white;
+  }
+  .form-textarea {
+    @apply w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white;
+  }
+
+  /* Table */
+  .table {
+    @apply w-full text-sm;
+  }
+  .table thead th {
+    @apply text-left text-slate-700 bg-slate-50 px-3 py-3;
+  }
+  .table tbody tr {
+    @apply border-t border-slate-100 hover:bg-slate-50;
+  }
+  .table td {
+    @apply px-3 py-3 align-top;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center text-xs font-medium px-2 py-1 rounded;
+  }
+  .badge-muted {
+    @apply bg-slate-100 text-slate-800;
+  }
+  .badge-info {
+    @apply bg-sky-100 text-sky-800;
+  }
+  .badge-success {
+    @apply bg-emerald-100 text-emerald-800;
+  }
+  .badge-warning {
+    @apply bg-amber-100 text-amber-800;
+  }
+  .badge-danger {
+    @apply bg-rose-100 text-rose-800;
+  }
+
+  /* Skeleton */
+  .skeleton {
+    @apply relative overflow-hidden rounded bg-slate-200;
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0.6) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+}
