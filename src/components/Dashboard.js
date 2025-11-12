@@ -62,7 +62,9 @@ const Dashboard = () => {
       const dateB = new Date(b.letterDate || b.createdDateTime || 0);
       const dateDiff = dateB - dateA;
       if (dateDiff !== 0) return dateDiff;
-      return extractSequence(b.referenceNumber) - extractSequence(a.referenceNumber);
+      return (
+        extractSequence(b.referenceNumber) - extractSequence(a.referenceNumber)
+      );
     });
     return sorted.slice(0, 5);
   }, [letters]);
@@ -151,7 +153,7 @@ const Dashboard = () => {
           </h3>
           <div className="space-y-3">
             <button
-              onClick={() => (window.location.href = "/letters")}
+              onClick={() => (window.location.href = "/references/letters")}
               className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <Hash className="h-4 w-4 mr-2" />
@@ -159,7 +161,7 @@ const Dashboard = () => {
             </button>
             {isAdmin ? (
               <button
-                onClick={() => (window.location.href = "/admin")}
+                onClick={() => (window.location.href = "/references/admin")}
                 className="w-full flex items-center justify-center px-4 py-2 border border-slate-300 rounded-md shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 <Shield className="h-4 w-4 mr-2" />
@@ -237,7 +239,9 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <p className="text-xs text-slate-500 mt-1 sm:mt-0">
-                  {new Date(letter.letterDate || letter.createdDateTime).toLocaleDateString()}
+                  {new Date(
+                    letter.letterDate || letter.createdDateTime
+                  ).toLocaleDateString()}
                 </p>
               </div>
             ))}
