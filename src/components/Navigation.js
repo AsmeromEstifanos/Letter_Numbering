@@ -19,7 +19,13 @@ const Navigation = ({ isMobileMenuOpen, setIsMobileMenuOpen }) => {
     typeof window !== "undefined" ? window.innerWidth < 1024 : false
   );
   const location = useLocation();
-  const { refreshAll, loading, isAdmin, userAccessResolved } = useLetters();
+  const {
+    refreshAll,
+    loading,
+    isAdmin,
+    userAccessResolved,
+    currentUserPrincipalName,
+  } = useLetters();
 
   useEffect(() => {
     const onResize = () => {
@@ -79,9 +85,11 @@ const Navigation = ({ isMobileMenuOpen, setIsMobileMenuOpen }) => {
             {!isNavCollapsed && (
               <>
                 <FileDigit className="w-8 h-8 text-blue-400" />
-                <span className="text-xl font-bold tracking-tight">
-                  Letter Numbering
-                </span>
+                <div className="flex flex-col leading-tight">
+                  <span className="text-xl font-bold tracking-tight">
+                    Letter Numbering
+                  </span>
+                </div>
               </>
             )}
           </div>
@@ -134,7 +142,7 @@ const Navigation = ({ isMobileMenuOpen, setIsMobileMenuOpen }) => {
           </div>
         </div>
 
-        <div className="flex flex-col py-4 h-[calc(100vh-76px)]">
+        <div className="relative flex flex-col py-4 h-[calc(100vh-76px)]">
           <ul className="space-y-1 flex-1 overflow-y-auto">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -164,8 +172,34 @@ const Navigation = ({ isMobileMenuOpen, setIsMobileMenuOpen }) => {
           </ul>
 
           {!isNavCollapsed && (
-            <div className="mt-auto px-4 pt-4 border-t border-white/10">
-              <div className="space-y-2 text-slate-300 mb-3">
+            <div
+              className={`px-4 pt-4 border-t border-white/10 space-y-3 ${
+                isMobile
+                  ? "sticky bottom-0 bg-gradient-to-br from-slate-800 to-slate-700"
+                  : "mt-auto"
+              }`}
+            >
+              <div className="space-y-2">
+                {currentUserPrincipalName && (
+                  <div className="text-xs">
+                    <p className="uppercase text-slate-400 tracking-wide">
+                      Signed in as
+                    </p>
+                    <p className="text-sm font-semibold text-white break-all">
+                      {currentUserPrincipalName}
+                    </p>
+                  </div>
+                )}
+                <div className="flex items-center justify-center lg:justify-between gap-2">
+                  {!isMobile && (
+                    <span className="text-xs text-slate-400">
+                      {currentUserPrincipalName ? "Account" : "Authentication"}
+                    </span>
+                  )}
+                  <AuthButtons compact={isMobile} />
+                </div>
+              </div>
+              <div className="border-t border-white/10 pt-3 space-y-2 text-slate-300">
                 <div className="flex items-center gap-2 text-xs">
                   <Shield size={14} />
                   <span>SharePoint Linked</span>
@@ -175,7 +209,6 @@ const Navigation = ({ isMobileMenuOpen, setIsMobileMenuOpen }) => {
                   <span>Multi-Company</span>
                 </div>
               </div>
-              <AuthButtons />
             </div>
           )}
         </div>

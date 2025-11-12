@@ -98,12 +98,80 @@ const LetterNumbering = () => {
     formState.year
   );
 
+  const [sortConfig, setSortConfig] = useState({
+    key: "date",
+    direction: "desc",
+  });
+
+  const sortedLetters = useMemo(() => {
+    const items = [...letters];
+    items.sort((a, b) => {
+      const dir = sortConfig.direction === "asc" ? 1 : -1;
+      switch (sortConfig.key) {
+        case "reference":
+          return (
+            (a.referenceNumber || "").localeCompare(
+              b.referenceNumber || "",
+              undefined,
+              { sensitivity: "base" }
+            ) * dir
+          );
+        case "recipient":
+          return (
+            (a.recipientCompany || "").localeCompare(
+              b.recipientCompany || "",
+              undefined,
+              { sensitivity: "base" }
+            ) * dir
+          );
+        case "subject":
+          return (
+            (a.subject || "").localeCompare(b.subject || "", undefined, {
+              sensitivity: "base",
+            }) * dir
+          );
+        case "preparedBy":
+          return (
+            (a.preparedBy || "").localeCompare(
+              b.preparedBy || "",
+              undefined,
+              { sensitivity: "base" }
+            ) * dir
+          );
+        case "date":
+        default:
+          return (
+            (new Date(a.letterDate || a.createdDateTime) -
+              new Date(b.letterDate || b.createdDateTime)) * dir
+          );
+      }
+    });
+    return items;
+  }, [letters, sortConfig]);
+
   const filteredLetters = useMemo(() => {
-    if (!formState.companyId) return letters;
-    return letters.filter(
+    if (!formState.companyId) return sortedLetters;
+    return sortedLetters.filter(
       (letter) => letter.companyId === formState.companyId
     );
-  }, [letters, formState.companyId]);
+  }, [sortedLetters, formState.companyId]);
+
+  const toggleSort = (key) => {
+    setSortConfig((prev) => {
+      if (prev.key === key) {
+        return {
+          key,
+          direction: prev.direction === "asc" ? "desc" : "asc",
+        };
+      }
+      return { key, direction: "asc" };
+    });
+  };
+
+  const sortIndicator = (key) => {
+    if (sortConfig.key !== key) return null;
+    return sortConfig.direction === "asc" ? " ▲" : " ▼";
+  };
 
   const handleChange = (field) => (event) => {
     const value = event.target.value;
@@ -623,18 +691,37 @@ const LetterNumbering = () => {
           <div className="mt-4 border border-slate-100 rounded-lg overflow-hidden">
             <div className="max-h-[32rem] overflow-y-auto">
             <table className="min-w-full divide-y divide-slate-200 text-sm">
-              <thead className="bg-slate-50 text-xs uppercase text-slate-500">
+              <thead className="bg-slate-50 text-xs uppercase text-slate-500 sticky top-0 z-10 shadow-sm">
                 <tr>
-                  <th className="px-3 py-2 text-left font-medium">Date</th>
-                  <th className="px-3 py-2 text-left font-medium">
-                    Reference
+                  <th
+                    className="px-3 py-2 text-left font-medium cursor-pointer select-none"
+                    onClick={() => toggleSort("date")}
+                  >
+                    Date{sortIndicator("date")}
                   </th>
-                  <th className="px-3 py-2 text-left font-medium">
-                    Recipient
+                  <th
+                    className="px-3 py-2 text-left font-medium cursor-pointer select-none"
+                    onClick={() => toggleSort("reference")}
+                  >
+                    Reference{sortIndicator("reference")}
                   </th>
-                  <th className="px-3 py-2 text-left font-medium">Subject</th>
-                  <th className="px-3 py-2 text-left font-medium">
-                    Prepared By
+                  <th
+                    className="px-3 py-2 text-left font-medium cursor-pointer select-none"
+                    onClick={() => toggleSort("recipient")}
+                  >
+                    Recipient{sortIndicator("recipient")}
+                  </th>
+                  <th
+                    className="px-3 py-2 text-left font-medium cursor-pointer select-none"
+                    onClick={() => toggleSort("subject")}
+                  >
+                    Subject{sortIndicator("subject")}
+                  </th>
+                  <th
+                    className="px-3 py-2 text-left font-medium cursor-pointer select-none"
+                    onClick={() => toggleSort("preparedBy")}
+                  >
+                    Prepared By{sortIndicator("preparedBy")}
                   </th>
                   <th className="px-3 py-2 text-left font-medium text-center">
                     Attachments
@@ -643,8 +730,12 @@ const LetterNumbering = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 bg-white">
-                {filteredLetters.map((letter) => (
-                  <React.Fragment key={letter.id}>
+                {filteredLetters.map((letter, index) => {
+                  const rowKey = letter.id
+                    ? `${letter.id}-${index}`
+                    : `${letter.referenceNumber || "ref"}-${index}`;
+                  return (
+                    <React.Fragment key={rowKey}>
                     <tr className="hover:bg-slate-50">
                       <td className="px-3 py-2 whitespace-nowrap">
                         {formatDisplayDate(letter.letterDate)}
@@ -735,8 +826,9 @@ const LetterNumbering = () => {
                         </td>
                       </tr>
                     )}
-                  </React.Fragment>
-                ))}
+                    </React.Fragment>
+                  );
+                })}
               </tbody>
             </table>
             </div>
