@@ -620,7 +620,8 @@ const LetterNumbering = () => {
             No letters found for this selection.
           </p>
         ) : (
-          <div className="mt-4 overflow-x-auto">
+          <div className="mt-4 border border-slate-100 rounded-lg overflow-hidden">
+            <div className="max-h-[32rem] overflow-y-auto">
             <table className="min-w-full divide-y divide-slate-200 text-sm">
               <thead className="bg-slate-50 text-xs uppercase text-slate-500">
                 <tr>
@@ -738,6 +739,7 @@ const LetterNumbering = () => {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         )}
       {editModalOpen && editingLetter && (

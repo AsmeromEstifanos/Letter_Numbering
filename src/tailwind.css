@@ -814,6 +814,10 @@ body {
   max-height: 15rem;
 }
 
+.max-h-\[32rem\] {
+  max-height: 32rem;
+}
+
 .max-h-\[80vh\] {
   max-height: 80vh;
 }

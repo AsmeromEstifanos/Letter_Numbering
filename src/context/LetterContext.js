@@ -566,8 +566,8 @@ export const LetterProvider = ({ children }) => {
               expand:
                 "fields($select=Title,ReferenceNumber,CompanyItemId,CompanyName,CompanyAbbreviation,SequenceNumber,Year,LetterDate,RecipientCompany,Subject,PreparedBy,Notes,Attachments)",
               orderBy: "fields/LetterDate desc",
-              top: options.top || 500,
-              fetchAll: options.fetchAll || false,
+              top: options.top ?? 500,
+              fetchAll: options.fetchAll ?? true,
             }
           );
 
@@ -598,8 +598,8 @@ export const LetterProvider = ({ children }) => {
                 expand:
                   "fields($select=Title,ReferenceNumber,CompanyItemId,CompanyName,CompanyAbbreviation,SequenceNumber,Year,LetterDate,RecipientCompany,Subject,PreparedBy,Notes,Attachments)",
                 orderBy: "fields/LetterDate desc",
-                top: options.top || 500,
-                fetchAll: options.fetchAll || false,
+                top: options.top ?? 500,
+                fetchAll: options.fetchAll ?? true,
               }
             );
             const letters = retryItems
